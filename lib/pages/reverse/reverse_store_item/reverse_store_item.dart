@@ -1,7 +1,7 @@
-import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:dona_do_santo/auth/firebase_auth/auth_util.dart';
 import 'package:dona_do_santo/backend/backend.dart';
 import 'package:dona_do_santo/backend/schema/reverse_store_record.dart';
@@ -12,7 +12,6 @@ import 'package:dona_do_santo/custom_code/widgets/components.dart'
 as components;
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../custom_code/widgets/components.dart';
 import '../../../flutter_flow/flutter_flow_icon_button.dart';

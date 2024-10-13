@@ -6,13 +6,14 @@ import 'index.dart'; // Imports other custom widgets
 import '/custom_code/actions/index.dart'; // Imports custom actions
 import '/flutter_flow/custom_functions.dart'; // Imports custom functions
 import 'package:flutter/material.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import 'package:dona_do_santo/custom_code/widgets/components.dart'
 as components;
 
-import 'package:carousel_slider/carousel_slider.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dona_do_santo/auth/firebase_auth/auth_util.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -43,15 +44,15 @@ class _HomePageState extends State<HomePage> {
           children: [
             Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 100,
                 ), //Margem para não interferir com a AppBar
                 WelcomeWidget(),
                 InfoContainers(),
-                SizedBox(height: 20), //margin top 20
+                const SizedBox(height: 20), //margin top 20
                 StoreNews(),
                 GeneralNews(),
-              ].divide(SizedBox(height: 10)),
+              ].divide(const SizedBox(height: 10)),
             ),
             components.AppBar(
               imageVariant:
@@ -67,10 +68,12 @@ class _HomePageState extends State<HomePage> {
 }
 
 class WelcomeWidget extends StatelessWidget {
+  const WelcomeWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: AlignmentDirectional(-1, 0),
+      alignment: const AlignmentDirectional(-1, 0),
       child: Text(
         'Como vai ${functions.returnFirstName(currentUserDisplayName)}?',
         style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -87,12 +90,14 @@ class WelcomeWidget extends StatelessWidget {
 
 //containers start
 class InfoContainers extends StatelessWidget {
+  const InfoContainers({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Stack(
-          alignment: AlignmentDirectional(1, 1),
+          alignment: const AlignmentDirectional(1, 1),
           children: [
             ClipRRect(
               borderRadius:
@@ -100,7 +105,7 @@ class InfoContainers extends StatelessWidget {
               child: InfoContainer.returnImage(
                   "https://actana.com.br/blog/wp-content/uploads/2023/07/plano-de-acao-loja-roupas.webp"),
             ),
-            InfoContainer(
+            const InfoContainer(
               imageUrl: 'None',
               header: 'Reverse',
               icon: FontAwesomeIcons.rev,
@@ -112,7 +117,7 @@ class InfoContainers extends StatelessWidget {
             ),
           ],
         ),
-        InfoContainer(
+        const InfoContainer(
           imageUrl:
           'https://www.davidjones.com/images/assetimages/2021/Campaigns/09-StoreService/fashion-landing/hero.png',
           header: 'Personal Stylist',
@@ -123,7 +128,7 @@ class InfoContainers extends StatelessWidget {
           hasGradient: false,
           pageName: 'DuvidasFrequentes',
         ),
-        InfoContainer(
+        const InfoContainer(
           imageUrl:
           'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/dona-do-santo-ujhc0y/assets/mhdiv6wmltzh/image_2024-06-11_101648581-removebg-preview.png',
           header: 'Bazar solidário',
@@ -134,7 +139,7 @@ class InfoContainers extends StatelessWidget {
           hasGradient: false,
           pageName: 'BazarSolidario',
         ),
-      ].divide(SizedBox(height: 20)),
+      ].divide(const SizedBox(height: 20)),
     );
   }
 }
@@ -177,8 +182,8 @@ class InfoContainer extends StatelessWidget {
           containerColor,
         ],
         stops: [0, 0.45],
-        begin: AlignmentDirectional(1, 0),
-        end: AlignmentDirectional(-1, 0),
+        begin: const AlignmentDirectional(1, 0),
+        end: const AlignmentDirectional(-1, 0),
       )
           : null,
     );
@@ -236,17 +241,17 @@ class InfoContainer extends StatelessWidget {
         context.pushNamed(pageName);
       },
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+        padding: const EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
         child: Stack(
           children: [
             Align(
-              alignment: AlignmentDirectional(0, 0),
+              alignment: const AlignmentDirectional(0, 0),
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: 150,
                 decoration: returnBoxDecoration(context, hasGradient),
                 child: Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -264,20 +269,20 @@ class InfoContainer extends StatelessWidget {
                               ),
                             ),
                             returnIcon(context, icon),
-                          ].divide(SizedBox(width: 10)),
+                          ].divide(const SizedBox(width: 10)),
                         ),
                       ),
                       Flexible(
                         flex: 4,
                         child: Align(
-                          alignment: AlignmentDirectional(-1, 0),
+                          alignment: const AlignmentDirectional(-1, 0),
                           child: Container(
                             width: MediaQuery.of(context).size.width * 0.48,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Color(0x00FFFFFF),
                             ),
                             child: Align(
-                              alignment: AlignmentDirectional(-1, -1),
+                              alignment: const AlignmentDirectional(-1, -1),
                               child: Text(
                                 description,
                                 style: returnDescriptionStyle(context),
@@ -287,7 +292,7 @@ class InfoContainer extends StatelessWidget {
                         ),
                       ),
                       Align(
-                        alignment: Alignment(-1, 0),
+                        alignment: const Alignment(-1, 0),
                         child: Text(
                           buttonText,
                           style: returnKnowMoreStyle(context),
@@ -300,7 +305,7 @@ class InfoContainer extends StatelessWidget {
             ),
             if (imageUrl != "None")
               Align(
-                alignment: AlignmentDirectional(1, 0),
+                alignment: const AlignmentDirectional(1, 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: returnImage(imageUrl),
@@ -345,7 +350,7 @@ class HeaderTexts extends StatelessWidget {
           color: FlutterFlowTheme.of(context).primaryText,
           size: 25,
         ),
-      ].divide(SizedBox(width: 10)),
+      ].divide(const SizedBox(width: 10)),
     );
   }
 }
@@ -401,8 +406,8 @@ class HomePageCarousel extends StatelessWidget {
           enableInfiniteScroll: true,
           scrollDirection: Axis.horizontal,
           autoPlay: true,
-          autoPlayAnimationDuration: Duration(milliseconds: 800),
-          autoPlayInterval: Duration(milliseconds: (800 + 20000)),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          autoPlayInterval: const Duration(milliseconds: (800 + 20000)),
           autoPlayCurve: Curves.linear,
           pauseAutoPlayInFiniteScroll: false,
         )
@@ -415,8 +420,8 @@ class HomePageCarousel extends StatelessWidget {
           enableInfiniteScroll: true,
           scrollDirection: Axis.horizontal,
           autoPlay: true,
-          autoPlayAnimationDuration: Duration(milliseconds: 800),
-          autoPlayInterval: Duration(milliseconds: (800 + 20000)),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          autoPlayInterval: const Duration(milliseconds: (800 + 20000)),
           autoPlayCurve: Curves.linear,
           pauseAutoPlayInFiniteScroll: true,
         ),
@@ -427,13 +432,15 @@ class HomePageCarousel extends StatelessWidget {
 
 //StoreNews start
 class StoreNews extends StatelessWidget {
+  const StoreNews({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
       child: Column(
         children: [
-          HeaderTexts(title: 'Novidades da loja', icon: FontAwesomeIcons.shirt),
+          const HeaderTexts(title: 'Novidades da loja', icon: FontAwesomeIcons.shirt),
           StreamBuilder<List<NovidadesRecord>>(
               stream: FFAppState().storeNews(
                 uniqueQueryKey: 'storeNews',
@@ -444,9 +451,9 @@ class StoreNews extends StatelessWidget {
               ),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return components.LoadingIcon();
+                  return const components.LoadingIcon();
                 }
-                return !snapshot.data!.isEmpty
+                return snapshot.data!.isNotEmpty
                     ? HomePageCarousel(
                   isCardRoupa: true,
                   isNoticiasWidget: false,
@@ -457,7 +464,7 @@ class StoreNews extends StatelessWidget {
                     height: 200,
                     title: 'Nenhuma novidade encontrada');
               }),
-        ].divide(SizedBox(height: 10)),
+        ].divide(const SizedBox(height: 10)),
       ),
     );
   }
@@ -466,13 +473,15 @@ class StoreNews extends StatelessWidget {
 
 //GeneralNews starts
 class GeneralNews extends StatelessWidget {
+  const GeneralNews({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
       child: Column(
         children: [
-          HeaderTexts(title: 'Notícias', icon: Icons.newspaper_rounded),
+          const HeaderTexts(title: 'Notícias', icon: Icons.newspaper_rounded),
           StreamBuilder<List<NoticiasRecord>>(
             stream: FFAppState().generalNews(
               uniqueQueryKey: 'generalNews',
@@ -483,9 +492,9 @@ class GeneralNews extends StatelessWidget {
             ),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return components.LoadingIcon();
+                return const components.LoadingIcon();
               }
-              return !snapshot.data!.isEmpty
+              return snapshot.data!.isNotEmpty
                   ? HomePageCarousel(
                 isCardRoupa: false,
                 isNoticiasWidget: true,
@@ -497,7 +506,7 @@ class GeneralNews extends StatelessWidget {
                   title: 'Nenhuma notícia encontrada');
             },
           ),
-        ].divide(SizedBox(height: 10)),
+        ].divide(const SizedBox(height: 10)),
       ),
     );
   }

@@ -1,13 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dona_do_santo/backend/schema/reverse_store_record.dart';
+// import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
 import 'package:dona_do_santo/pages/reverse_store_dummy_docs.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../auth/firebase_auth/auth_util.dart';
 import '../../backend/backend.dart';
-import '../reverse/reverse/reverse_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:dona_do_santo/custom_code/widgets/components.dart'
