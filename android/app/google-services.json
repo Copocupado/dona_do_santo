@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "696798996786",
+    "project_id": "dona-do-santo-ujhc0y",
+    "storage_bucket": "dona-do-santo-ujhc0y.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696798996786:android:a13629bba5d1717d0f8f2b",
+        "android_client_info": {
+          "package_name": "com.mycompany.donadosanto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696798996786-atcssmutn2h6vncut5r581s32akee4ao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.donadosanto",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "696798996786-iqd464tan04hja8b3k6np5hetf6lqf50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQs55Fagz0sp7WQ52vdjLZvLXFdzF0itY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696798996786-ec02p8e9sg9p9ua7uejrhc3mhcuir0gn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "696798996786-auutovnaoas42veke2th79f1t6d82vp8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.donadosanto"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
