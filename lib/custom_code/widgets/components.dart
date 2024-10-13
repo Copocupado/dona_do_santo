@@ -1,4 +1,3 @@
-/*
 // Automatic FlutterFlow imports
 import 'dart:ui';
 
@@ -7,11 +6,8 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import "package:dona_do_santo/custom_code/actions/show_snack_bar.dart";
 import 'package:dona_do_santo/flutter_flow/flutter_flow_animations.dart';
-import 'package:dona_do_santo/flutter_flow/flutter_flow_toggle_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,21 +29,16 @@ import '../../auth/firebase_auth/auth_util.dart';
 import '../../backend/schema/notifications_record.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import '../../pages/notifications/notifications_widget.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:dona_do_santo/backend/schema/reverse_store_record.dart';
 import '/flutter_flow/upload_data.dart';
 import '../../custom_code/actions/deleteImagesFromStorage.dart';
-
-import 'package:dona_do_santo/app_state.dart';
-import 'package:dona_do_santo/auth/firebase_auth/auth_util.dart';
 import 'package:dona_do_santo/backend/schema/structs/favs_by_user_struct.dart';
-import 'package:dona_do_santo/custom_code/actions/index.dart';
 
 class NotificationBadge extends StatelessWidget {
   final Color mainColor;
   final Color secondaryColor;
 
-  const NotificationBadge({
+  const NotificationBadge({super.key,
     required this.mainColor,
     required this.secondaryColor,
   });
@@ -74,7 +65,7 @@ class NotificationBadge extends StatelessWidget {
         ),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return LoadingIcon();
+            return const LoadingIcon();
           }
           List<NotificationsRecord> list = snapshot.data!;
           return SizedBox(
@@ -84,8 +75,8 @@ class NotificationBadge extends StatelessWidget {
               position: badges.BadgePosition.topEnd(top: -5, end: 0),
               showBadge: shouldShowBadge(list),
               ignorePointer: false,
-              badgeContent: Text(""),
-              badgeAnimation: badges.BadgeAnimation.scale(
+              badgeContent: const Text(""),
+              badgeAnimation: const badges.BadgeAnimation.scale(
                 animationDuration: Duration(seconds: 1),
                 colorChangeAnimationDuration: Duration(seconds: 1),
                 loopAnimation: false,
@@ -95,714 +86,7 @@ class NotificationBadge extends StatelessWidget {
               badgeStyle: badges.BadgeStyle(
                 shape: badges.BadgeShape.circle,
                 badgeColor: secondaryColor,
-                padding: EdgeInsets.all(5),
-                elevation: 3,
-              ),
-              child: Icon(
-                Icons.notifications_none_rounded,
-                color: mainColor,
-                size: 30,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  bool shouldShowBadge(List<NotificationsRecord> list) {
-    for (var notification in list) {
-      if (notification.viewed == false) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-class OptionsDialog extends StatelessWidget {
-  final DocumentReference<Object?> docRef;
-
-  const OptionsDialog({
-    super.key,
-    required this.docRef,
-  });
-
-  @override
-  Widget build(BuildContext context){
-    return Container(
-        width: 150,
-        height: 84,
-        decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).secondaryBackground,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                Option(function: () => context.pushNamed(
-                  'CreateAnuncio',
-                  queryParameters: {
-                    docRef.path.startsWith('solicitacoes/') ? 'solicitacao' : 'reverseStoreDoc' : serializeParam(
-                      docRef,
-                      ParamType.DocumentReference,
-                    ),
-                  }.withoutNulls,
-                ), icon: Icons.edit, text: 'Editar'),
-                Option(
-                  function: () async {
-
-                    bool isConfirmed =
-                    await confirmationDialog(context);
-                    if (!isConfirmed) return;
-
-                    try{
-                      showUploadMessage(
-                        context,
-                        'Excluindo arquivo...',
-                        showLoading: true,
-                      );
-                    }
-                    catch (e){
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      print(e);
-                    }
-                    finally {
-                      await excluirAnuncio();
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      showSnackBar(context, 'Sucesso', 'Arquivo excluído', "success");
-                      context.pushNamed('HomePage');
-                    }
-                  },
-                  icon: Icons.delete,
-                  text: 'Excluir',
-                ),
-              ].divide(const SizedBox(height: 20)),
-            )
-        )
-    );
-  }
-  Future<void> excluirAnuncio() async {
-    List<String> imageList = [];
-    print('excluindo...');
-
-    if(docRef.path.startsWith('reverse_store')){
-      ReverseStoreRecord doc = await ReverseStoreRecord.getDocumentOnce(docRef!);
-      imageList = doc.images;
-      print('excluindo doc...');
-      await doc.reference.delete();
-    }
-    else{
-      SolicitacoesRecord doc = await SolicitacoesRecord.getDocumentOnce(docRef!);
-      imageList = doc.images;
-      print('excluindo doc...');
-      await doc.reference.delete();
-    }
-    await deleteImagesFromStorage(imageList);
-  }
-}
-class Option extends StatelessWidget {
-  final dynamic function;
-  final IconData icon;
-  final String text;
-
-  const Option({
-    super.key,
-    required this.function,
-    required this.icon,
-    required this.text,
-  });
-
-  @override
-  Widget build(BuildContext context){
-    return InkWell(
-      onTap: function,
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: text == 'Excluir' ? FlutterFlowTheme.of(context).error : FlutterFlowTheme.of(context).primaryText,
-            size: 20,
-          ),
-          Text(
-            text,
-            style: FlutterFlowTheme.of(context).bodyMedium.override(
-              fontFamily: 'Readex Pro',
-              color: text == 'Excluir' ? FlutterFlowTheme.of(context).error : FlutterFlowTheme.of(context).primaryText,
-            ),
-          ),
-        ].divide(const SizedBox(width: 10)),
-      ),
-    );
-  }
-}
-
-class ToggleCartIcon extends StatefulWidget{
-  final double buttonSize;
-  final double iconSize;
-  final DocumentReference<Object?> docRef;
-
-  const ToggleCartIcon({
-    super.key,
-    this.buttonSize = 46,
-    this.iconSize = 25,
-    required this.docRef,
-  });
-
-  @override
-  State<StatefulWidget> createState() => ToggleCartIconState();
-}
-
-class ToggleCartIconState extends State<ToggleCartIcon> with TickerProviderStateMixin {
-  final animationsMap = <String, AnimationInfo>{};
-
-  @override
-  void initState() {
-    super.initState();
-
-    animationsMap.addAll({
-      'toggleIconOnActionTriggerAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onActionTrigger,
-        applyInitialState: true,
-        effectsBuilder: () => [
-          ScaleEffect(
-            curve: Curves.elasticOut,
-            delay: 0.0.ms,
-            duration: 300.0.ms,
-            begin: const Offset(1.0, 1.0),
-            end: const Offset(1.2, 1.2),
-          ),
-          ScaleEffect(
-            curve: Curves.elasticOut,
-            delay: 300.0.ms,
-            duration: 300.0.ms,
-            begin: const Offset(1.2, 1.2),
-            end: const Offset(1.0, 1.0),
-          ),
-        ],
-      ),
-    });
-    setupAnimations(
-      animationsMap.values.where((anim) =>
-      anim.trigger == AnimationTrigger.onActionTrigger ||
-          !anim.applyInitialState),
-      this,
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
-  }
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<List<DocumentReference>?>(
-      valueListenable: FFAppState().userFavedItems,
-      builder: (context, favRefs, _) {
-        return FlutterFlowIconButton(
-          borderColor: FlutterFlowTheme.of(context).alternate,
-          borderRadius: 8,
-          buttonSize: widget.buttonSize,
-          fillColor: const Color(0x8B484848),
-          icon: Icon(
-            favRefs!.contains(widget.docRef) ? Icons.shopping_bag : Icons.shopping_bag_outlined,
-            color: Colors.white,
-            size: widget.iconSize,
-          ),
-          onPressed: () async {
-            final currentList = List<DocumentReference>.from(FFAppState().userFavedItems.value!);
-            if (currentList.contains(widget.docRef)) {
-              currentList.remove(widget.docRef);
-              ScaffoldMessenger.of(context)..hideCurrentSnackBar();
-              showSnackbar(context, "Item removido do carrinho");
-            } else {
-              ScaffoldMessenger.of(context)..hideCurrentSnackBar();
-              showSnackbar(context, "Item adicionado ao carrinho");
-              currentList.add(widget.docRef);
-            }
-            FFAppState().userFavedItems.value = currentList;
-            FavsByUserStruct newFavsByUser = FavsByUserStruct(user: currentUserReference, reverseStoreItems: FFAppState().userFavedItems);
-            for(var item in FFAppState().favsByUserMap){
-              print(item.user == currentUserReference);
-              if(item.user == currentUserReference){
-                FFAppState().removeFromFavsByUserMap(item);
-                FFAppState().addToFavsByUserMap(newFavsByUser);
-              }
-            }
-            if (animationsMap['toggleIconOnActionTriggerAnimation'] != null) {
-              await animationsMap['toggleIconOnActionTriggerAnimation']!
-                  .controller
-                  .forward(from: 0.0);
-            }
-          },
-        ).animateOnActionTrigger(
-          animationsMap['toggleIconOnActionTriggerAnimation']!,
-        );
-      },
-    );
-  }
-}
-
-class NoticiasCardComponent extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String description;
-  final DateTime created_time;
-  final Uri link;
-
-  const NoticiasCardComponent({
-    required this.imagePath,
-    required this.title,
-    required this.description,
-    required this.created_time,
-    required this.link,
-  });
-
-  Widget returnBackGroundImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
-      child: ImageWithPlaceholder(
-          image: imagePath, width: double.infinity, height: double.infinity),
-    );
-  }
-
-  Widget returnTextInfo(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 25,
-          child: Align(
-            alignment: AlignmentDirectional(-1, 0),
-            child: AutoSizeText(
-              title,
-              minFontSize: 8,
-              overflow: TextOverflow.ellipsis,
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                fontFamily: 'Readex Pro',
-                fontSize: 17,
-                letterSpacing: 0,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 30,
-          child: Align(
-            alignment: AlignmentDirectional(-1, 0),
-            child: AutoSizeText(
-              minFontSize: 5,
-              description,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                fontFamily: 'Readex Pro',
-                color: FlutterFlowTheme.of(context).primaryText,
-                fontSize: 17,
-                letterSpacing: 0,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget returnDateTimeText(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Align(
-          alignment: AlignmentDirectional(-1, 1),
-          child: Text(
-            DateFormat('dd MMM yyyy', 'pt_BR').format(created_time),
-            style: FlutterFlowTheme.of(context).bodyMedium.override(
-              fontFamily: 'Readex Pro',
-              letterSpacing: 0,
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
-          child: Container(
-            width: 7,
-            height: 7,
-            decoration: BoxDecoration(
-              color: FlutterFlowTheme.of(context).primaryText,
-              shape: BoxShape.circle,
-            ),
-          ),
-        ),
-        Text(
-          dateTimeFormat(
-            'relative',
-            created_time,
-            locale: FFLocalizations.of(context).languageCode,
-          ),
-          style: FlutterFlowTheme.of(context).bodyMedium.override(
-            fontFamily: 'Readex Pro',
-            fontSize: 12,
-            letterSpacing: 0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ].divide(SizedBox(width: 5)),
-    );
-  }
-
-  Widget returnKnowMoreButton(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        if (await canLaunchUrl(link)) {
-          await launchUrl(link);
-        } else {
-          showSnackBar(
-              context,
-              'Falha ao acessar link',
-              'Verifique sua conexão com a internet e tente novamente',
-              'failure');
-        }
-      },
-      child: Container(
-        width: 120,
-        height: 40,
-        decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).primaryText,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Saiba Mais',
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                  fontFamily: 'Readex Pro',
-                  color: FlutterFlowTheme.of(context).primaryBackground,
-                  letterSpacing: 0,
-                ),
-              ),
-              FaIcon(
-                FontAwesomeIcons.arrowRight,
-                color: FlutterFlowTheme.of(context).primary,
-                size: 18,
-              ),
-            ].divide(SizedBox(width: 5)),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        returnBackGroundImage(),
-        Align(
-          alignment: AlignmentDirectional(0, 1),
-          child: Container(
-            width: double.infinity,
-            height: 120,
-            decoration: BoxDecoration(
-              color: Color(0xE9B9B9B9),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(12),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  returnTextInfo(context),
-                  Container(
-                    width: double.infinity,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: Color(0x00B9B9B9),
-                    ),
-                    child: Stack(
-                      children: [
-                        returnDateTimeText(context),
-                        Align(
-                          alignment: AlignmentDirectional(1, 1),
-                          child: returnKnowMoreButton(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class CustomCarrousel extends StatelessWidget {
-  const CustomCarrousel({
-    super.key,
-    required this.width,
-    required this.height,
-    required this.imgList,
-  });
-
-  final double width;
-  final double height;
-  final List<String> imgList;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: this.width,
-      height: this.height,
-      child: CarouselSlider(
-        items: imgList
-            .map((item) => ApplyBackGroundStyles(
-          imagePath: item,
-          widgetWidth: double.infinity,
-          widgetHeight: double.infinity,
-        ))
-            .toList(),
-        options: CarouselOptions(
-          initialPage: 0,
-          viewportFraction: 1.0,
-          disableCenter: true,
-          enlargeCenterPage: true,
-          enlargeFactor: 0.25,
-          enableInfiniteScroll: true,
-          scrollDirection: Axis.horizontal,
-          autoPlay: true,
-          autoPlayAnimationDuration: const Duration(milliseconds: 500),
-          autoPlayInterval: const Duration(seconds: 5),
-          autoPlayCurve: Curves.linear,
-          pauseAutoPlayOnTouch: true,
-        ),
-      ),
-    );
-  }
-}
-
-class AssetImage extends StatelessWidget {
-  final String assetPath;
-  final double width;
-  final double height;
-
-  const AssetImage({
-    required this.width,
-    required this.height,
-    required this.assetPath,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.asset(
-      assetPath,
-      width: width,
-      height: height,
-      fit: BoxFit.cover,
-    );
-  }
-}
-
-class HeaderWidget extends StatelessWidget {
-  final imagePath;
-  final title;
-  final description;
-
-  const HeaderWidget({
-    required this.imagePath,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final double headerHeight = MediaQuery.of(context).size.height *
-        0.7; //Mude o valor para mudar o tamanho do header
-
-    return Stack(
-      children: [
-        ApplyBackGroundStyles(
-          imagePath: imagePath,
-          widgetWidth: MediaQuery.of(context).size.width,
-          widgetHeight: headerHeight,
-        ),
-        AppBarWithGoBackArrow(
-            mainColor: FlutterFlowTheme.of(context).primaryBackground,
-            secondaryColor: FlutterFlowTheme.of(context).secondary),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: Container(
-            height: headerHeight - 50,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  height: (headerHeight - 50) * 0.6,
-                  child: Align(
-                    alignment: AlignmentDirectional(0, 1),
-                    child: AutoSizeText(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        color:
-                        FlutterFlowTheme.of(context).primaryBackground,
-                        fontSize: 80,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  height: (headerHeight - 50) * 0.2,
-                  child: Align(
-                    alignment: AlignmentDirectional(0, 1),
-                    child: AutoSizeText(
-                      description,
-                      textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        color:
-                        FlutterFlowTheme.of(context).primaryBackground,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class LoadingIcon extends StatelessWidget {
-  final Color? altColor;
-
-  const LoadingIcon({
-    super.key,
-    this.altColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 50,
-        height: 50,
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(
-            altColor ?? FlutterFlowTheme.of(context).tertiary,
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
-
-// Automatic FlutterFlow imports
-import 'dart:ui';
-
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:badges/badges.dart' as badges;
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import "package:dona_do_santo/custom_code/actions/show_snack_bar.dart";
-import 'package:dona_do_santo/flutter_flow/flutter_flow_animations.dart';
-import 'package:dona_do_santo/flutter_flow/flutter_flow_toggle_icon.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:octo_image/octo_image.dart';
-import 'package:provider/provider.dart';
-import 'package:dona_do_santo/flutter_flow/flutter_flow_icon_button.dart';
-import 'package:aligned_dialog/aligned_dialog.dart';
-import '../../../custom_code/actions/convertDoubleToString.dart';
-// Begin custom widget code
-// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
-import 'package:url_launcher/url_launcher.dart';
-
-import '/backend/backend.dart';
-import '/custom_code/actions/index.dart'; // Imports custom actions
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import '../../auth/firebase_auth/auth_util.dart';
-import '../../backend/schema/notifications_record.dart';
-import 'package:super_tooltip/super_tooltip.dart';
-import '../../pages/notifications/notifications_widget.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:dona_do_santo/backend/schema/reverse_store_record.dart';
-import '/flutter_flow/upload_data.dart';
-import '../../custom_code/actions/deleteImagesFromStorage.dart';
-
-import 'package:dona_do_santo/app_state.dart';
-import 'package:dona_do_santo/auth/firebase_auth/auth_util.dart';
-import 'package:dona_do_santo/backend/schema/structs/favs_by_user_struct.dart';
-
-class NotificationBadge extends StatelessWidget {
-  final Color mainColor;
-  final Color secondaryColor;
-
-  const NotificationBadge({
-    required this.mainColor,
-    required this.secondaryColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        if (GoRouterState.of(context).uri.toString() != "/notifications") {
-          context.pushNamed('Notifications');
-        }
-      },
-      child: StreamBuilder<List<NotificationsRecord>>(
-        stream: FFAppState().storeNotifications(
-          uniqueQueryKey: currentUserReference?.id,
-          requestFn: () => queryNotificationsRecord(
-            queryBuilder: (notificationsRecord) => notificationsRecord
-                .orderBy('created_time', descending: true)
-                .where(
-              'belongs_to',
-              isEqualTo: currentUserReference,
-            ),
-          ),
-        ),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return LoadingIcon();
-          }
-          List<NotificationsRecord> list = snapshot.data!;
-          return SizedBox(
-            width: 35,
-            height: 35,
-            child: badges.Badge(
-              position: badges.BadgePosition.topEnd(top: -5, end: 0),
-              showBadge: shouldShowBadge(list),
-              ignorePointer: false,
-              badgeContent: Text(""),
-              badgeAnimation: badges.BadgeAnimation.scale(
-                animationDuration: Duration(seconds: 1),
-                colorChangeAnimationDuration: Duration(seconds: 1),
-                loopAnimation: false,
-                curve: Curves.fastOutSlowIn,
-                colorChangeAnimationCurve: Curves.easeInCubic,
-              ),
-              badgeStyle: badges.BadgeStyle(
-                shape: badges.BadgeShape.circle,
-                badgeColor: secondaryColor,
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 elevation: 3,
               ),
               child: Icon(
@@ -829,9 +113,9 @@ class NotificationBadge extends StatelessWidget {
 
 class ConfigClass {
   // taxa cobrada pela loja
-  static final fee = 10;
-  static final personalStylistNumber = '+5554999686749';
-  static final staffNumber = '5554999686749';
+  static const fee = 10;
+  static const personalStylistNumber = '+5554999686749';
+  static const staffNumber = '5554999686749';
 
   static final shippingList = [
     'Com o vendedor',
@@ -841,8 +125,8 @@ class ConfigClass {
     "Entregue",
   ];
 
-  static final dispatchProductTime = 3;
-  static final storeTimeToShip = 5;
+  static const dispatchProductTime = 3;
+  static const storeTimeToShip = 5;
 }
 
 class AppBar extends StatelessWidget {
@@ -891,7 +175,7 @@ class AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 30),
+      padding: const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 30),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -921,7 +205,7 @@ class AppBar extends StatelessWidget {
                   size: 30,
                 ),
               ),
-            ].divide(SizedBox(width: 30)),
+            ].divide(const SizedBox(width: 30)),
           ),
         ],
       ),
@@ -933,7 +217,7 @@ class AppBarWithGoBackArrow extends StatelessWidget {
   final Color mainColor;
   final Color secondaryColor;
 
-  const AppBarWithGoBackArrow({
+  const AppBarWithGoBackArrow({super.key,
     required this.mainColor,
     required this.secondaryColor,
   });
@@ -945,7 +229,7 @@ class AppBarWithGoBackArrow extends StatelessWidget {
       child: Column(
         children: [
           Align(
-            alignment: Alignment(-1, 0),
+            alignment: const Alignment(-1, 0),
             child: InkWell(
               onTap: () {
                 context.safePop();
@@ -999,7 +283,7 @@ class AssetImage extends StatelessWidget {
   final double width;
   final double height;
 
-  const AssetImage({
+  const AssetImage({super.key,
     required this.width,
     required this.height,
     required this.assetPath,
@@ -1021,7 +305,7 @@ class ImageWithPlaceholder extends StatelessWidget {
   final double? width;
   final double? height;
 
-  const ImageWithPlaceholder({
+  const ImageWithPlaceholder({super.key,
     required this.image,
     this.width,
     this.height,
@@ -1030,7 +314,7 @@ class ImageWithPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return width != null || height != null ? OctoImage(
-      placeholderBuilder: (_) => SizedBox.expand(
+      placeholderBuilder: (_) => const SizedBox.expand(
         child: Image(
           image: BlurHashImage('LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
           fit: BoxFit.cover,
@@ -1049,7 +333,7 @@ class ImageWithPlaceholder extends StatelessWidget {
         fit: BoxFit.cover,
       ),
     ) : OctoImage(
-      placeholderBuilder: (_) => SizedBox.expand(
+      placeholderBuilder: (_) => const SizedBox.expand(
         child: Image(
           image: BlurHashImage('LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
           fit: BoxFit.cover,
@@ -1075,7 +359,7 @@ class DataNotFound extends StatelessWidget {
   final double? height;
   final IconData? icon;
 
-  const DataNotFound({
+  const DataNotFound({super.key,
     required this.title,
     this.height,
     this.width,
@@ -1101,30 +385,30 @@ class DataNotFound extends StatelessWidget {
       children: [
         Icon(
           icon ?? FontAwesomeIcons.circleExclamation,
-          color: Color(0x7B343533),
+          color: const Color(0x7B343533),
           size: 80,
         ),
         Text(
           title,
           style: FlutterFlowTheme.of(context).bodyMedium.override(
             fontFamily: 'Readex Pro',
-            color: Color(0x7B343533),
+            color: const Color(0x7B343533),
             fontSize: 15,
             letterSpacing: 0,
             fontWeight: FontWeight.w900,
           ),
         ),
-      ].divide(SizedBox(height: 10)),
+      ].divide(const SizedBox(height: 10)),
     );
   }
 }
 
 class HeaderWidget extends StatelessWidget {
-  final imagePath;
-  final title;
-  final description;
+  final String imagePath;
+  final String title;
+  final String description;
 
-  const HeaderWidget({
+  const HeaderWidget({super.key,
     required this.imagePath,
     required this.title,
     required this.description,
@@ -1147,16 +431,16 @@ class HeaderWidget extends StatelessWidget {
             secondaryColor: FlutterFlowTheme.of(context).secondary),
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Container(
+          child: SizedBox(
             height: headerHeight - 50,
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
+                SizedBox(
                   height: (headerHeight - 50) * 0.6,
                   child: Align(
-                    alignment: AlignmentDirectional(0, 1),
+                    alignment: const AlignmentDirectional(0, 1),
                     child: AutoSizeText(
                       title,
                       textAlign: TextAlign.center,
@@ -1170,10 +454,10 @@ class HeaderWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: (headerHeight - 50) * 0.2,
                   child: Align(
-                    alignment: AlignmentDirectional(0, 1),
+                    alignment: const AlignmentDirectional(0, 1),
                     child: AutoSizeText(
                       description,
                       textAlign: TextAlign.center,
@@ -1201,7 +485,7 @@ class Sections extends StatelessWidget {
   final bool hasGifs;
 
   const Sections(
-      {required this.sectionsName,
+      {super.key, required this.sectionsName,
         required this.icon,
         required this.listOfSections,
         required this.hasGifs});
@@ -1232,12 +516,12 @@ class Sections extends StatelessWidget {
               color: FlutterFlowTheme.of(context).tertiary,
               size: 30,
             ),
-          ].divide(SizedBox(width: 10)),
+          ].divide(const SizedBox(width: 10)),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           itemCount: listOfSections.length,
           itemBuilder: (context, index) {
@@ -1247,7 +531,7 @@ class Sections extends StatelessWidget {
                   model: listOfSections[index],
                   hasGif: hasGifs,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
               ],
@@ -1277,7 +561,7 @@ class Section extends StatelessWidget {
   final SectionModel model;
   final bool hasGif;
 
-  const Section({
+  const Section({super.key,
     required this.model,
     required this.hasGif,
   });
@@ -1293,12 +577,12 @@ class Section extends StatelessWidget {
             color: Colors.black.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: ExpansionTile(
-        shape: Border(),
+        shape: const Border(),
         title: Text(
           model.expandableTitle,
           style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -1309,59 +593,57 @@ class Section extends StatelessWidget {
           ),
         ),
         children: [
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  if (model.title != "")
-                    Text(
-                      model.title,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        color: FlutterFlowTheme.of(context).secondary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (model.title != "")
                   Text(
-                    model.description,
+                    model.title,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                       fontFamily: 'Readex Pro',
-                      color: FlutterFlowTheme.of(context).alternate,
-                      fontSize: 14,
+                      color: FlutterFlowTheme.of(context).secondary,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (hasGif)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: OctoImage(
-                        placeholderBuilder: (_) => SizedBox.expand(
-                          child: Image(
-                            image:
-                            BlurHashImage('LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
-                            fit: BoxFit.cover,
-                          ),
+                Text(
+                  model.description,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Readex Pro',
+                    color: FlutterFlowTheme.of(context).alternate,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                if (hasGif)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: OctoImage(
+                      placeholderBuilder: (_) => const SizedBox.expand(
+                        child: Image(
+                          image:
+                          BlurHashImage('LEHV6nWB2yk8pyo0adR*.7kCMdnj'),
+                          fit: BoxFit.cover,
                         ),
-                        image: NetworkImage(
-                          model.gifPath,
-                        ),
-                        width: MediaQuery.sizeOf(context).width,
-                        height: 500,
-                        fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Image.asset(
-                              'assets/images/error_image.png',
-                              width: MediaQuery.sizeOf(context).width,
-                              height: 500,
-                              fit: BoxFit.fill,
-                            ),
                       ),
+                      image: NetworkImage(
+                        model.gifPath,
+                      ),
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 500,
+                      fit: BoxFit.fill,
+                      errorBuilder: (context, error, stackTrace) =>
+                          Image.asset(
+                            'assets/images/error_image.png',
+                            width: MediaQuery.sizeOf(context).width,
+                            height: 500,
+                            fit: BoxFit.fill,
+                          ),
                     ),
-                ].divide(SizedBox(height: 10)),
-              ),
+                  ),
+              ].divide(const SizedBox(height: 10)),
             ),
           ),
         ],
@@ -1443,8 +725,8 @@ class CustomCarrousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: this.width,
-      height: this.height,
+      width: width,
+      height: height,
       child: CarouselSlider(
         items: imgList
             .map((item) => ApplyBackGroundStyles(
@@ -1505,7 +787,7 @@ class CustomStepperState extends State<CustomStepper> {
           content: Column(
             children: [
               Align(
-                alignment: AlignmentDirectional(-1, 0),
+                alignment: const AlignmentDirectional(-1, 0),
                 child: Text(
                   widget.stepTitles![i],
                   textAlign: TextAlign.start,
@@ -1554,10 +836,11 @@ class CustomStepperState extends State<CustomStepper> {
   void initState() {
     super.initState();
 
-    if (widget.listOfSteps != null)
+    if (widget.listOfSteps != null) {
       stepperSize = widget.listOfSteps!.length;
-    else
+    } else {
       stepperSize = widget.stepTitles!.length;
+    }
   }
 
   @override
@@ -1572,7 +855,7 @@ class CustomStepperState extends State<CustomStepper> {
         ),
       ),
       child: Stepper(
-        physics: ClampingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         steps: widget.listOfSteps ?? createSteps(),
         currentStep: currentStep,
         onStepContinue: () {
@@ -1601,6 +884,7 @@ class CustomStepperState extends State<CustomStepper> {
                         backgroundColor:
                         FlutterFlowTheme.of(context).primaryBackground,
                       ),
+                      onPressed: ControlsDetails.onStepCancel,
                       child: Text(
                         'VOLTAR',
                         style: FlutterFlowTheme.of(context)
@@ -1611,7 +895,6 @@ class CustomStepperState extends State<CustomStepper> {
                             color:
                             FlutterFlowTheme.of(context).primaryText),
                       ),
-                      onPressed: ControlsDetails.onStepCancel,
                     ),
                   ),
                 const SizedBox(width: 12),
@@ -1621,6 +904,7 @@ class CustomStepperState extends State<CustomStepper> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: FlutterFlowTheme.of(context).secondary,
                       ),
+                      onPressed: ControlsDetails.onStepContinue,
                       child: Text(
                         'PRÓXIMO',
                         style: FlutterFlowTheme.of(context)
@@ -1631,7 +915,6 @@ class CustomStepperState extends State<CustomStepper> {
                             color:
                             FlutterFlowTheme.of(context).primaryText),
                       ),
-                      onPressed: ControlsDetails.onStepContinue,
                     ),
                   ),
               ],
@@ -1644,6 +927,8 @@ class CustomStepperState extends State<CustomStepper> {
 }
 
 class ContainerWithBorder extends StatelessWidget{
+  const ContainerWithBorder({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1820,9 +1105,9 @@ class _CardRoupaComponentState extends State<CardRoupaComponent>
                     ),
                   ),
                   Align(
-                    alignment: AlignmentDirectional(-1, 0),
+                    alignment: const AlignmentDirectional(-1, 0),
                     child: Text(
-                      'R\$ ' + convertDoubleToString(widget.price),
+                      'R\$ ${convertDoubleToString(widget.price)}',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
                         letterSpacing: 2,
@@ -1831,7 +1116,7 @@ class _CardRoupaComponentState extends State<CardRoupaComponent>
                     ),
                   ),
                   Align(
-                    alignment: AlignmentDirectional(-1, 0),
+                    alignment: const AlignmentDirectional(-1, 0),
                     child: Text(
                       widget.title.maybeHandleOverflow(
                         maxChars: 25,
@@ -1854,6 +1139,7 @@ class _CardRoupaComponentState extends State<CardRoupaComponent>
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: WillPopScope(
+                        onWillPop: popToolTip,
                         child: GestureDetector(
                           onTap: () async {
                             await _controller.showTooltip();
@@ -1867,9 +1153,9 @@ class _CardRoupaComponentState extends State<CardRoupaComponent>
                               showBarrier: true,
                               controller: _controller,
                               content: Text(
-                                widget!.isNegated! ? "Seu anúncio foi negado pelo motivo de \"${widget.explanation}\" e deve ser editado para poder ser reavaliado" : "Seu anúncio está em avaliação, volte novamente mais tarde",
+                                widget.isNegated! ? "Seu anúncio foi negado pelo motivo de \"${widget.explanation}\" e deve ser editado para poder ser reavaliado" : "Seu anúncio está em avaliação, volte novamente mais tarde",
                                 softWrap: true,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                 ),
                               ),
@@ -1879,8 +1165,7 @@ class _CardRoupaComponentState extends State<CardRoupaComponent>
                                 size: 30,
                               )
                           ),
-                        ),
-                        onWillPop: popToolTip),
+                        )),
                   ),
                 ),
               if(getParamName(widget.docRef) != 'novidade')
@@ -1914,7 +1199,7 @@ class OptionsIcon extends StatelessWidget {
   final double iconSize;
   final DocumentReference<Object?> docRef;
 
-  const OptionsIcon({
+  const OptionsIcon({super.key,
     this.buttonSize = 30,
     this.iconSize = 15,
     required this.docRef,
@@ -1938,9 +1223,9 @@ class OptionsIcon extends StatelessWidget {
           isGlobal: false,
           avoidOverflow: true,
           targetAnchor:
-          AlignmentDirectional(-1, 0).resolve(Directionality.of(context)),
+          const AlignmentDirectional(-1, 0).resolve(Directionality.of(context)),
           followerAnchor:
-          AlignmentDirectional(0, 0).resolve(Directionality.of(context)),
+          const AlignmentDirectional(0, 0).resolve(Directionality.of(context)),
           builder: (dialogContext) {
             return Material(
               color: Colors.transparent,
@@ -2019,13 +1304,13 @@ class OptionsDialog extends StatelessWidget {
     print('excluindo...');
 
     if(docRef.path.startsWith('reverse_store')){
-      ReverseStoreRecord doc = await ReverseStoreRecord.getDocumentOnce(docRef!);
+      ReverseStoreRecord doc = await ReverseStoreRecord.getDocumentOnce(docRef);
       imageList = doc.images;
       print('excluindo doc...');
       await doc.reference.delete();
     }
     else{
-      SolicitacoesRecord doc = await SolicitacoesRecord.getDocumentOnce(docRef!);
+      SolicitacoesRecord doc = await SolicitacoesRecord.getDocumentOnce(docRef);
       imageList = doc.images;
       print('excluindo doc...');
       await doc.reference.delete();
@@ -2185,7 +1470,7 @@ class NoticiasCardComponent extends StatelessWidget {
   final DateTime created_time;
   final Uri link;
 
-  const NoticiasCardComponent({
+  const NoticiasCardComponent({super.key,
     required this.imagePath,
     required this.title,
     required this.description,
@@ -2207,7 +1492,7 @@ class NoticiasCardComponent extends StatelessWidget {
         SizedBox(
           height: 25,
           child: Align(
-            alignment: AlignmentDirectional(-1, 0),
+            alignment: const AlignmentDirectional(-1, 0),
             child: AutoSizeText(
               title,
               minFontSize: 8,
@@ -2224,7 +1509,7 @@ class NoticiasCardComponent extends StatelessWidget {
         SizedBox(
           height: 30,
           child: Align(
-            alignment: AlignmentDirectional(-1, 0),
+            alignment: const AlignmentDirectional(-1, 0),
             child: AutoSizeText(
               minFontSize: 5,
               description,
@@ -2249,7 +1534,7 @@ class NoticiasCardComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Align(
-          alignment: AlignmentDirectional(-1, 1),
+          alignment: const AlignmentDirectional(-1, 1),
           child: Text(
             DateFormat('dd MMM yyyy', 'pt_BR').format(created_time),
             style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -2259,7 +1544,7 @@ class NoticiasCardComponent extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
+          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 5),
           child: Container(
             width: 7,
             height: 7,
@@ -2282,7 +1567,7 @@ class NoticiasCardComponent extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-      ].divide(SizedBox(width: 5)),
+      ].divide(const SizedBox(width: 5)),
     );
   }
 
@@ -2307,7 +1592,7 @@ class NoticiasCardComponent extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
         ),
         child: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
+          padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -2325,7 +1610,7 @@ class NoticiasCardComponent extends StatelessWidget {
                 color: FlutterFlowTheme.of(context).primary,
                 size: 18,
               ),
-            ].divide(SizedBox(width: 5)),
+            ].divide(const SizedBox(width: 5)),
           ),
         ),
       ),
@@ -2338,16 +1623,16 @@ class NoticiasCardComponent extends StatelessWidget {
       children: [
         returnBackGroundImage(),
         Align(
-          alignment: AlignmentDirectional(0, 1),
+          alignment: const AlignmentDirectional(0, 1),
           child: Container(
             width: double.infinity,
             height: 120,
             decoration: BoxDecoration(
-              color: Color(0xE9B9B9B9),
+              color: const Color(0xE9B9B9B9),
               borderRadius: BorderRadius.circular(24),
             ),
             child: Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2356,14 +1641,14 @@ class NoticiasCardComponent extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     height: 38,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color(0x00B9B9B9),
                     ),
                     child: Stack(
                       children: [
                         returnDateTimeText(context),
                         Align(
-                          alignment: AlignmentDirectional(1, 1),
+                          alignment: const AlignmentDirectional(1, 1),
                           child: returnKnowMoreButton(context),
                         ),
                       ],
