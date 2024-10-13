@@ -7,7 +7,6 @@
 .pub/
 /build/
 
-.env
 
 # iOS related files
 ios/Flutter/Flutter.framework
