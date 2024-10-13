@@ -34,7 +34,7 @@ dependencies:
   cloud_firestore: 4.17.3
   cloud_firestore_platform_interface: 6.2.3
   cloud_firestore_web: 3.12.3
-  collection: 1.18.0
+  collection: 1.19.0
   csv: 6.0.0
   dropdown_button2: ^2.3.9
   easy_debounce: ^2.0.3
@@ -132,6 +132,7 @@ dependency_overrides:
   http: 1.2.1
   uuid: ^4.0.0
   win32: 5.5.1
+  collection: ^1.19.0
 
 dev_dependencies:
   flutter_launcher_icons: 0.13.1
@@ -142,6 +143,8 @@ dev_dependencies:
 
   flutter_test:
     sdk: flutter
+
+
 
 
 flutter_launcher_icons:
