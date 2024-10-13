@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Update this line to use AGP 7.4.0 or higher
+        classpath 'com.android.tools.build:gradle:7.4.2'  // Update to at least 7.4.0
+    }
+}
+
 allprojects {
     repositories {
         google()
