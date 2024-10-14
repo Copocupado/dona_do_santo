@@ -1,6 +1,9 @@
 # Uncomment this line to define a global platform for your project
 platform :ios, '14.0.0'
 
+
+use_frameworks!  # This makes CocoaPods use dynamic frameworks.
+
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -33,6 +36,7 @@ target 'Runner' do
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '10.25.0'
+  pod 'Firebase/Storage', :modular_headers => true
 end
 
 post_install do |installer|
