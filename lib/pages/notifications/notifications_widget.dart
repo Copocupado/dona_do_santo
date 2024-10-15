@@ -5,13 +5,11 @@ import 'package:dona_do_santo/backend/schema/pedidos_record.dart';
 import 'package:dona_do_santo/custom_code/widgets/components.dart'
 as components;
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../backend/backend.dart';
 import '../../flutter_flow/flutter_flow_theme.dart';
-import '../../flutter_flow/nav/serialization_util.dart';
 import '../reverse/reverse/reverse_widget.dart';
 
 class NotificationsWidget extends StatelessWidget {
@@ -112,16 +110,8 @@ class Notification extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        if(notification is DocumentReference) {
-          context.pushNamed(
-            notification.dynamicRoute,
-            queryParameters: {
-              getParamName(notification.paramsForRoute) : serializeParam(
-                notification.paramsForRoute,
-                ParamType.DocumentReference,
-              ),
-            }.withoutNulls,
-          );
+        /*if(notification is DocumentReference) {
+
         } else {
           context.pushNamed(
             notification.dynamicRoute,
@@ -135,7 +125,16 @@ class Notification extends StatelessWidget {
               getParamName(notification.paramsForRoute['reference']): PedidosRecord.getDocumentFromData(notification.paramsForRoute, notification.paramsForRoute['reference'])
             },
           );
-        }
+        }*/
+        context.pushNamed(
+          notification.dynamicRoute,
+          queryParameters: {
+            getParamName(notification.paramsForRoute) : serializeParam(
+              notification.paramsForRoute,
+              ParamType.DocumentReference,
+            ),
+          }.withoutNulls,
+        );
       },
       child: VisibilityDetector(
         key: Key('visibility-detector-$visibilityDetectorKey'),

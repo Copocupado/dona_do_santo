@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dona_do_santo/auth/firebase_auth/auth_util.dart';
 import 'package:dona_do_santo/backend/schema/pedidos_record.dart';
 import 'package:dona_do_santo/flutter_flow/flutter_flow_theme.dart';
@@ -9,22 +8,21 @@ import 'package:dona_do_santo/custom_code/widgets/components.dart'
 as components;
 import 'package:dona_do_santo/custom_code/widgets/home_page.dart' as homePage;
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../../app_state.dart';
 import '../../../custom_code/actions/convertDoubleToString.dart';
 import '../../../flutter_flow/flutter_flow_widgets.dart';
 import '../checkout/checkout.dart';
 
 class Order extends StatelessWidget {
-  final DocumentReference? orderRef;
+  final DocumentReference? pedido;
 
   const Order({
     super.key,
-    required this.orderRef,
+    required this.pedido,
   });
 
   @override
   Widget build(BuildContext context) {
+    print(pedido);
     return Scaffold(
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
@@ -38,9 +36,9 @@ class Order extends StatelessWidget {
             Expanded(
               child: StreamBuilder<PedidosRecord>(
                 stream: FFAppState().pedidoItem(
-                  uniqueQueryKey: orderRef!.id,
+                  uniqueQueryKey: pedido!.id,
                   requestFn: () =>
-                      PedidosRecord.getDocument(orderRef!),
+                      PedidosRecord.getDocument(pedido!),
                 ),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {

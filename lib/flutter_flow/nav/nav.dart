@@ -313,8 +313,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
 			requireAuth: true,
 			path: '/order',
 			builder: (context, params) => Order(
-				orderRef: params.getParam(
-					'orderRef',
+				pedido: params.getParam(
+					'pedido',
 					ParamType.DocumentReference,
 					isList: false,
 					collectionNamePath: ['pedidos'],
