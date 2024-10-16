@@ -93,6 +93,8 @@ class FirebaseApi {
     await firebaseMessaging.requestPermission();
     return await firebaseMessaging.getToken();
   }
+
+
 }
 
 
