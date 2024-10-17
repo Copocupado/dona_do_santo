@@ -16,12 +16,51 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'index.dart';
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+	print('Handling a background message: ${message.messageId}');
+}
+
 void main() async {
+	final AppStateNotifier _appStateNotifier = AppStateNotifier.instance;
+	final GoRouter _router = createRouter(_appStateNotifier);
+	Future<void> initPushNotifications() async {
+		final firebaseMessaging = FirebaseMessaging.instance;
+
+		await firebaseMessaging.requestPermission(
+			alert: true,
+			announcement: true,
+			badge: true,
+			carPlay: true,
+			criticalAlert: true,
+			provisional: true,
+			sound: true,
+		);
+
+		void handleMessage(RemoteMessage? message) {
+			WidgetsBinding.instance.addPostFrameCallback((_) {
+				_router.go('/notifications');
+			});
+		}
+
+		FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+		// Handle messages when the app is in the foreground
+		FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+			handleMessage(message);
+		});
+
+		// Handle messages when the app is in the background but not terminated
+		FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+			handleMessage(message);
+		});
+	}
+
 	await dotenv.load(fileName: ".env");
 	WidgetsFlutterBinding.ensureInitialized();
 	GoRouter.optionURLReflectsImperativeAPIs = true;
 	usePathUrlStrategy();
 	await FirebaseApi.initFirebase();
+	await initPushNotifications();
 
 	final appState = FFAppState(); // Initialize FFAppState
 
@@ -44,7 +83,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-	final firebaseMessaging = FirebaseMessaging.instance;
 	Locale? _locale;
 
 	ThemeMode _themeMode = ThemeMode.system;
@@ -58,7 +96,6 @@ class _MyAppState extends State<MyApp> {
 	@override
 	void initState() {
 		super.initState();
-
 		_appStateNotifier = AppStateNotifier.instance;
 		_router = createRouter(_appStateNotifier);
 		userStream = donaDoSantoFirebaseUserStream()
@@ -70,38 +107,6 @@ class _MyAppState extends State<MyApp> {
 			const Duration(milliseconds: 1000),
 					() => _appStateNotifier.stopShowingSplashImage(),
 		);
-		initPushNotifications();
-	}
-	Future<void> initPushNotifications() async {
-		await firebaseMessaging.setForegroundNotificationPresentationOptions(
-			alert: true,
-			badge: true,
-			sound: true,
-		);
-
-		// Handle messages when the app is in the foreground
-		FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-			handleMessage(message);
-		});
-
-		// Handle messages when the app is in the background but not terminated
-		FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-			handleMessage(message);
-		});
-
-		FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-	}
-
-	void handleMessage(RemoteMessage? message) {
-		WidgetsBinding.instance.addPostFrameCallback((_) {
-			_router.go('/notifications');
-		});
-	}
-
-	Future<void> handleBackgroundMessage(RemoteMessage? message) async {
-		if (message != null) {
-			handleMessage(message);
-		}
 	}
 
 
