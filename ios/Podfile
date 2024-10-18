@@ -3,6 +3,8 @@ platform :ios, '14.0.0'
 
 
 use_frameworks!  # This makes CocoaPods use dynamic frameworks.
+pod 'Firebase', :modular_headers => true
+
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
