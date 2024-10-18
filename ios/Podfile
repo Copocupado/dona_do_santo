@@ -25,19 +25,21 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
+  # Use modular headers for Firebase dependencies
   use_modular_headers!
 
   # Install Firebase dependencies
-  pod 'Firebase', :modular_headers => true
-  pod 'FirebaseAuth', :modular_headers => true
-  pod 'FirebaseCore', :modular_headers => true
-  pod 'FirebaseFirestore', :modular_headers => true
+  pod 'Firebase/Core', :modular_headers => true
+  pod 'Firebase/Auth', :modular_headers => true
+  pod 'Firebase/Firestore', :modular_headers => true
   pod 'Firebase/Storage', :modular_headers => true
   pod 'Firebase/AnalyticsWithoutAdIdSupport', :modular_headers => true
+  pod 'Firebase/Performance', :modular_headers => true
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
+# Post-install configurations
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     # Add additional iOS build settings for Flutter
