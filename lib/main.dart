@@ -73,9 +73,9 @@ void main() async {
 	await dotenv.load(fileName: ".env");
 	GoRouter.optionURLReflectsImperativeAPIs = true;
 	usePathUrlStrategy();
-	if(Platform.isAndroid) {
+	/*if(Platform.isAndroid) {
 		await initPushNotifications();
-	}
+	}*/
 	runApp(ChangeNotifierProvider(
 		create: (context) => appState,
 		child: const MyApp(),
