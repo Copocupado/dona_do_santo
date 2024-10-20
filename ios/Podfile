@@ -35,6 +35,8 @@ target 'Runner' do
   pod 'Firebase/Storage', :modular_headers => true
   pod 'Firebase/AnalyticsWithoutAdIdSupport', :modular_headers => true
   pod 'Firebase/Performance', :modular_headers => true
+  pod 'Firebase/Crashlytics' :modular_headers => true
+  pod 'Firebase/Analytics' :modular_headers => true
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

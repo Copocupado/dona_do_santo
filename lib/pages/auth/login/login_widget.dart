@@ -104,7 +104,6 @@ class FormFieldsState extends State<FormFields> {
           const SizedBox(height: 10),
           FFButtonWidget(
             onPressed: () async {
-              throw Exception();
               await login(
                 context,
                 emailController.text,

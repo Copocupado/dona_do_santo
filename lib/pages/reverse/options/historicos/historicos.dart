@@ -12,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../app_state.dart';
 import '../../../../auth/firebase_auth/auth_util.dart';
 import '../../../../flutter_flow/flutter_flow_util.dart';
+import '../../../notifications/notifications_widget.dart';
 
 class Historicos extends StatelessWidget {
 
@@ -104,7 +105,7 @@ class PedidoContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => context.pushNamed('Order', queryParameters: {
-        'orderRef' : serializeParam(
+        getParamName(pedido.reference) : serializeParam(
           pedido.reference,
           ParamType.DocumentReference,
         ),
