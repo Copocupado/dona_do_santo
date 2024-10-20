@@ -110,6 +110,8 @@ dependencies:
   http: ^1.2.2
   crypto: ^3.0.5
   qr_flutter: ^4.1.0
+  firebase_crashlytics: ^3.5.7
+  firebase_analytics: ^10.10.7
 
 dependency_overrides:
   http: ^1.2.1

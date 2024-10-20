@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +25,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+	WidgetsFlutterBinding.ensureInitialized();
+	await FirebaseApi.initFirebase();
+	FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+	PlatformDispatcher.instance.onError = (error, stack) {
+		FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+		return true;
+	};
 	final AppStateNotifier _appStateNotifier = AppStateNotifier.instance;
 	final GoRouter _router = createRouter(_appStateNotifier);
 
@@ -60,10 +70,8 @@ void main() async {
 	}
 
 	await dotenv.load(fileName: ".env");
-	WidgetsFlutterBinding.ensureInitialized();
 	GoRouter.optionURLReflectsImperativeAPIs = true;
 	usePathUrlStrategy();
-	await FirebaseApi.initFirebase();
 	await initPushNotifications();
 	runApp(ChangeNotifierProvider(
 		create: (context) => appState,
