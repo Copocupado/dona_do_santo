@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -72,7 +73,9 @@ void main() async {
 	await dotenv.load(fileName: ".env");
 	GoRouter.optionURLReflectsImperativeAPIs = true;
 	usePathUrlStrategy();
-	await initPushNotifications();
+	if(Platform.isAndroid) {
+		await initPushNotifications();
+	}
 	runApp(ChangeNotifierProvider(
 		create: (context) => appState,
 		child: const MyApp(),
