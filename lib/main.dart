@@ -24,6 +24,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
 	final AppStateNotifier _appStateNotifier = AppStateNotifier.instance;
 	final GoRouter _router = createRouter(_appStateNotifier);
+
+	final appState = FFAppState(); // Initialize FFAppState
+	await appState.initializePersistedState();
+
 	Future<void> initPushNotifications() async {
 		final firebaseMessaging = FirebaseMessaging.instance;
 
@@ -61,14 +65,11 @@ void main() async {
 	usePathUrlStrategy();
 	await FirebaseApi.initFirebase();
 	await initPushNotifications();
-
-	final appState = FFAppState(); // Initialize FFAppState
-
 	runApp(ChangeNotifierProvider(
 		create: (context) => appState,
 		child: const MyApp(),
 	));
-	await appState.initializePersistedState();
+
 }
 
 class MyApp extends StatefulWidget {
