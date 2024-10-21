@@ -648,7 +648,6 @@ class NotificationsSection extends StatelessWidget{
 
 	@override
 	Widget build(BuildContext context) {
-		print(initialValue);
 		return SizedBox(
 			width: MediaQuery.of(context).size.width,
 			height: 70,

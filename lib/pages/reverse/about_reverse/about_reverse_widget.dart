@@ -1,3 +1,4 @@
+import 'package:dona_do_santo/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:dona_do_santo/custom_code/widgets/components.dart'
 as components;
@@ -13,6 +14,7 @@ class AboutReverseWidget extends StatelessWidget{
 
     return  Scaffold(
       key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: const SafeArea(
         top: true,
         child: SingleChildScrollView(
