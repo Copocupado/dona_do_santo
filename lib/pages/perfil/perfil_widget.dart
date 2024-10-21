@@ -159,9 +159,10 @@ class PerfilWidgetState extends State<PerfilWidget> {
 																	}
 																},
 																text: 'Sair',
-																icon: const Icon(
+																icon: Icon(
 																	Icons.logout,
 																	size: 24,
+																	color: FlutterFlowTheme.of(context).primaryBackground,
 																),
 																options: FFButtonOptions(
 																	padding: const EdgeInsetsDirectional.fromSTEB(
