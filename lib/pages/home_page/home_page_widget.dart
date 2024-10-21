@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-// import 'package:carousel_slider/carousel_slider.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
 import 'package:dona_do_santo/pages/reverse_store_dummy_docs.dart';

@@ -348,6 +348,7 @@ class CardViewLayout extends StatelessWidget {
                   icon: Icon(
                     doc is ReverseStoreRecord ? Icons.pix_rounded : Icons.store,
                     size: 27,
+                    color: doc is ReverseStoreRecord ? Colors.white : FlutterFlowTheme.of(context).primaryText,
                   ),
                   options: FFButtonOptions(
                     color: doc is ReverseStoreRecord ? const Color(0xFF00B488) : FlutterFlowTheme.of(context).primary,
