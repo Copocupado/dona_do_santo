@@ -29,9 +29,19 @@ class ReverseWidgetState extends State<ReverseWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   static final FocusNode unfocusNode = FocusNode();
   final autoCompleteBoxFocusNode = FocusNode();
-  static final autocompleteKey = GlobalKey<AutoCompleteBoxState>();
-  static final reverseStoreSearchKey = GlobalKey<ReverseStoreSearchState>();
-  static final selectedFiltersKey = GlobalKey<SelectedFiltersState>();
+
+  static GlobalKey<AutoCompleteBoxState>? autocompleteKey;
+  static GlobalKey<ReverseStoreSearchState>? reverseStoreSearchKey;
+  static GlobalKey<SelectedFiltersState>? selectedFiltersKey;
+
+  @override
+  void initState() {
+    super.initState();
+
+    autocompleteKey ??= GlobalKey<AutoCompleteBoxState>();
+    reverseStoreSearchKey ??= GlobalKey<ReverseStoreSearchState>();
+    selectedFiltersKey ??= GlobalKey<SelectedFiltersState>();
+  }
 
   @override
   void dispose() {
@@ -517,7 +527,7 @@ class AlgoliaDocsState extends State<AlgoliaDocs> {
       facetFilters.add('price < ${SearchFiltersDialog.maxPrice}');
     }
 
-    ReverseWidgetState.reverseStoreSearchKey.currentState!.setState(() {
+    ReverseWidgetState.reverseStoreSearchKey?.currentState!.setState(() {
       ReverseStoreSearchState.isFetchingDocs = true;
     });
     snapshot = await query
@@ -525,19 +535,19 @@ class AlgoliaDocsState extends State<AlgoliaDocs> {
         .query(SearchFieldState.controller.text)
         .setPage(pageToGet)
         .getObjects();
-    ReverseWidgetState.autocompleteKey.currentState!.updateSuggestions();
+    ReverseWidgetState.autocompleteKey?.currentState!.updateSuggestions();
 
     if(shouldSaveCacheQuery){
       saveQueryToCache();
     }
     else{
-      if(ReverseWidgetState.selectedFiltersKey.currentState!= null){
-        ReverseWidgetState.selectedFiltersKey.currentState!.setState(() {});
+      if(ReverseWidgetState.selectedFiltersKey?.currentState!= null){
+        ReverseWidgetState.selectedFiltersKey?.currentState!.setState(() {});
       }
     }
     if(index == 'reverse_store_index'){
       convertSnapshotToReverseItems();
-      ReverseWidgetState.reverseStoreSearchKey.currentState!.setState(() {
+      ReverseWidgetState.reverseStoreSearchKey?.currentState!.setState(() {
         ReverseStoreSearchState.isFetchingDocs = false;
       });
     }
@@ -614,7 +624,7 @@ class SearchFieldState extends State<SearchField> {
   @override
   void initState() {
     super.initState();
-    focusNode.addListener(ReverseWidgetState.autocompleteKey.currentState!.toggleShouldBeDisplayed);
+    focusNode.addListener(ReverseWidgetState.autocompleteKey!.currentState!.toggleShouldBeDisplayed);
   }
 
   @override

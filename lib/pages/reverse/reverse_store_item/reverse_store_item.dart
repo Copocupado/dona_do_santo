@@ -10,6 +10,7 @@ import 'package:dona_do_santo/custom_code/actions/convertDoubleToString.dart';
 import 'package:dona_do_santo/custom_code/actions/goToUrl.dart';
 import 'package:dona_do_santo/custom_code/widgets/components.dart'
 as components;
+import 'package:dona_do_santo/custom_code/widgets/index.dart';
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 
@@ -331,13 +332,13 @@ class CardViewLayout extends StatelessWidget {
                         'ExtraDetails',
                         queryParameters: {
                           'itemsList': serializeParam(
-                            [doc],
+                            [doc as ReverseStoreRecord],
                             ParamType.Document,
                             isList: true,
                           ),
                         }.withoutNulls,
                         extra: <String, dynamic>{
-                          'itemsList': [doc],
+                          'itemsList': [doc as ReverseStoreRecord],
                         },
                       );
                     } else {

@@ -77,6 +77,8 @@ class SolicitacoesRecord extends FirestoreRecord implements GeneralInfo{
   bool get negated => _negated ?? false;
   bool hasNegated() => _negated != null;
 
+  String? _explanation;
+
   void _initializeFields() {
     _title = snapshotData['title'] as String?;
     _description = snapshotData['description'] as String?;
@@ -90,6 +92,7 @@ class SolicitacoesRecord extends FirestoreRecord implements GeneralInfo{
     _price = castToType<double>(snapshotData['price']);
     _negated = snapshotData['negated'] as bool?;
     _createdByEmail = snapshotData['created_by_email'] as String?;
+    _explanation = snapshotData['negated_explanation'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -129,7 +132,7 @@ class SolicitacoesRecord extends FirestoreRecord implements GeneralInfo{
   DocumentReference<Object?> get docRef => reference;
 
   @override
-  String? get explanation => null;
+  String? get explanation => _explanation;
 
   @override
   String get image => _images![0];

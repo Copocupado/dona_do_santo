@@ -62,7 +62,6 @@ final authenticatedUserStream = FirebaseAuth.instance
 
   if(currentUserDocument != null){
     FFAppState().initializeFavedItemsMap();
-
     if(currentUserDocument!.allowedNotifications){
       FirebaseApi.initNotifications();
     } else {
