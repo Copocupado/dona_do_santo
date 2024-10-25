@@ -157,6 +157,7 @@ flutter:
     - assets/images/auth/bg_images/
     - assets/images/home_page/
     - assets/images/about/
+    - assets/images/reverse_credits/
     - assets/videos/
     - assets/audios/
     - assets/lottie_animations/

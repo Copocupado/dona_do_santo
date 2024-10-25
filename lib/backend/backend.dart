@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dona_do_santo/backend/schema/notifications_record.dart';
 import 'package:dona_do_santo/backend/schema/pedidos_record.dart';
+import 'package:dona_do_santo/backend/schema/relatorio_reverse_credits_record.dart';
 import 'package:dona_do_santo/backend/schema/reverse_store_record.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../auth/firebase_auth/auth_util.dart';
@@ -351,6 +352,20 @@ Stream<List<PedidosRecord>> queryPedidosRecord({
     queryCollection(
       PedidosRecord.collection,
       PedidosRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Stream<List<RelatorioReverseCreditsRecord>> queryRelatorioReverseCreditsRecord({
+  required DocumentReference parentDocRef, // Add parent document reference
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      RelatorioReverseCreditsRecord.collection(parentDocRef), // Use the parent doc reference
+      RelatorioReverseCreditsRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

@@ -281,17 +281,25 @@ class LoadingIcon extends StatelessWidget {
 
 class AssetImage extends StatelessWidget {
   final String assetPath;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
 
   const AssetImage({super.key,
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
     required this.assetPath,
   });
 
   @override
   Widget build(BuildContext context) {
+    if(width == null){
+      return Expanded(
+        child: Image.asset(
+          assetPath,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
     return Image.asset(
       assetPath,
       width: width,
@@ -391,6 +399,7 @@ class DataNotFound extends StatelessWidget {
         ),
         Text(
           title,
+          textAlign: TextAlign.center,
           style: FlutterFlowTheme.of(context).bodyMedium.override(
             fontFamily: 'Readex Pro',
             color: const Color(0x7B343533),

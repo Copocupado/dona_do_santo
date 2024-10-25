@@ -1,6 +1,7 @@
 import 'package:dona_do_santo/auth/firebase_auth/auth_util.dart';
 import 'package:dona_do_santo/backend/schema/notifications_record.dart';
 import 'package:dona_do_santo/backend/schema/pedidos_record.dart';
+import 'package:dona_do_santo/backend/schema/relatorio_reverse_credits_record.dart';
 import 'package:dona_do_santo/backend/schema/reverse_store_record.dart';
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
@@ -338,6 +339,18 @@ class FFAppState extends ChangeNotifier {
 	void clearPedidoItemItemCache() => _pedidoManager.clear();
 	void clearPedidoItemCacheKey(String? uniqueKey) =>
 			_pedidoManager.clearRequest(uniqueKey);
+
+
+	final _relatoriosReverseCredits = StreamRequestManager<List<RelatorioReverseCreditsRecord>>();
+	Stream<List<RelatorioReverseCreditsRecord>> relatorios({
+		String? uniqueQueryKey,
+		bool? overrideCache,
+		required Stream<List<RelatorioReverseCreditsRecord>> Function() requestFn,
+	}) => _relatoriosReverseCredits.performRequest(
+		uniqueQueryKey: uniqueQueryKey,
+		overrideCache: overrideCache,
+		requestFn: requestFn,
+	);
 }
 
 void _safeInit(Function() initializeField) {
