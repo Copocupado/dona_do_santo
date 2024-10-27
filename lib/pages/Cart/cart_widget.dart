@@ -194,9 +194,10 @@ class CartWidgetState extends State<CartWidget> {
                                     );
                                   },
                                   text: 'Comprar via pix',
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.pix_rounded,
                                     size: 27,
+                                    color: FlutterFlowTheme.of(context).primaryBackground,
                                   ),
                                   options: FFButtonOptions(
                                     color: const Color(0xFF00B488),

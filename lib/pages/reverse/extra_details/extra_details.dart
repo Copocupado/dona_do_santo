@@ -52,174 +52,178 @@ class ExtraDetailsState extends State<ExtraDetails> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              components.AppBarWithGoBackArrow(
-                mainColor: FlutterFlowTheme.of(context).primaryText,
-                secondaryColor: FlutterFlowTheme.of(context).tertiary,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  children: [
-                    const homePage.HeaderTexts(title: "Endereço de entrega", icon: Icons.delivery_dining_outlined),
-                    Text(
-                      'Insira uma loja de retirada. Este será o endereço que você deverá buscar o produto quando estiver perto de você',
-                      style: FlutterFlowTheme
-                          .of(context)
-                          .bodyMedium
-                          .override(
-                        fontFamily: 'Readex Pro',
-                        color: FlutterFlowTheme
-                            .of(context)
-                            .secondaryText,
-                        fontSize: 12,
-                        letterSpacing: 0,
-                      ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 270,
-                      child: SearchableDropDown(
-                        key: searchableDropDownKey,
-                      ),
-                    ),
-                    const homePage.HeaderTexts(title: "CPF", icon: FontAwesomeIcons.addressCard),
-                    Form(
-                      key: formKey,
-                      child: TextFormField(
-                        controller: controller,
-                        focusNode: focusNode,
-                        onChanged: (_) => EasyDebounce.debounce(
-                          'controller',
-                          const Duration(milliseconds: 1),
-                              () => setState(() => canGoToCheckout = formKey.currentState!.validate()),
-                        ),
-                        autofocus: false,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          labelText: 'Seu CPF...',
-                          labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                            fontFamily: 'Readex Pro',
-                            letterSpacing: 0.0,
-                          ),
-                          hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                            fontFamily: 'Readex Pro',
-                            letterSpacing: 0.0,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).secondary,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          filled: true,
-                          fillColor: Colors.transparent,
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Readex Pro',
-                          letterSpacing: 0.0,
-                        ),
-                        cursorColor: FlutterFlowTheme.of(context).primaryText,
-                        validator: (value) {
-                          // CPF must be 11 digits (excluding mask characters)
-                          if (value == null || value.isEmpty) {
-                            return 'Digite seu CPF';
-                          } else if (!_validateCPF(value)) {
-                            return 'CPF inválido';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    FFButtonWidget(
-                      onPressed: canGoToCheckout ? () => context.pushNamed(
-                        'Checkout',
-                        queryParameters: {
-                          'itemsList': serializeParam(
-                            widget.itemsList,
-                            ParamType.Document,
-                            isList: true,
-                          ),
-                          'address' : serializeParam(
-                            searchableDropDownKey
-                                .currentState
-                                ?.storesDict[searchableDropDownKey
-                                .currentState?.selectedValue]
-                                ?.address,
-                            ParamType.String,
-                            isList: false,
-                          ),
-                          'formattedAddress' : serializeParam(
-                            searchableDropDownKey.currentState!.selectedValue,
-                            ParamType.String,
-                            isList: false,
-                          ),
-                          'image' : serializeParam(
-                            searchableDropDownKey.currentState!.selectedValueImage,
-                            ParamType.String,
-                            isList: false,
-                          ),
-                          'cpf' : serializeParam(
-                            controller.text,
-                            ParamType.String,
-                            isList: false,
-                          ),
-                        }.withoutNulls,
-                        extra: <String, dynamic>{
-                          'itemsList': widget.itemsList,
-                        },
-                      ) : null,
-                      text: 'Check Out',
-                      icon: const Icon(
-                        Icons.shopping_cart_checkout,
-                        size: 24,
-                      ),
-                      options: FFButtonOptions(
-                        width: MediaQuery.sizeOf(context).width,
-                        height: 70,
-                        padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-                        iconPadding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                        color: FlutterFlowTheme.of(context).secondary,
-                        textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                          fontFamily: 'Readex Pro',
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          letterSpacing: 0.0,
-                        ),
-                        elevation: 10,
-                        borderRadius: BorderRadius.circular(8),
-                        disabledColor: FlutterFlowTheme.of(context).secondaryText,
-                        disabledTextColor: FlutterFlowTheme.of(context).primaryBackground,
-                      ),
-                    ),
-                  ].divide(const SizedBox(height: 12)),
+        body: SafeArea(
+          top: true,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                components.AppBarWithGoBackArrow(
+                  mainColor: FlutterFlowTheme.of(context).primaryText,
+                  secondaryColor: FlutterFlowTheme.of(context).tertiary,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    children: [
+                      const homePage.HeaderTexts(title: "Endereço de entrega", icon: Icons.delivery_dining_outlined),
+                      Text(
+                        'Insira uma loja de retirada. Este será o endereço que você deverá buscar o produto quando estiver perto de você',
+                        style: FlutterFlowTheme
+                            .of(context)
+                            .bodyMedium
+                            .override(
+                          fontFamily: 'Readex Pro',
+                          color: FlutterFlowTheme
+                              .of(context)
+                              .secondaryText,
+                          fontSize: 12,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 270,
+                        child: SearchableDropDown(
+                          key: searchableDropDownKey,
+                        ),
+                      ),
+                      const homePage.HeaderTexts(title: "CPF", icon: FontAwesomeIcons.addressCard),
+                      Form(
+                        key: formKey,
+                        child: TextFormField(
+                          controller: controller,
+                          focusNode: focusNode,
+                          onChanged: (_) => EasyDebounce.debounce(
+                            'controller',
+                            const Duration(milliseconds: 1),
+                                () => setState(() => canGoToCheckout = formKey.currentState!.validate()),
+                          ),
+                          autofocus: false,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            labelText: 'Seu CPF...',
+                            labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
+                            hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).secondary,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor: Colors.transparent,
+                          ),
+                          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Readex Pro',
+                            letterSpacing: 0.0,
+                          ),
+                          cursorColor: FlutterFlowTheme.of(context).primaryText,
+                          validator: (value) {
+                            // CPF must be 11 digits (excluding mask characters)
+                            if (value == null || value.isEmpty) {
+                              return 'Digite seu CPF';
+                            } else if (!_validateCPF(value)) {
+                              return 'CPF inválido';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      FFButtonWidget(
+                        onPressed: canGoToCheckout ? () => context.pushNamed(
+                          'Checkout',
+                          queryParameters: {
+                            'itemsList': serializeParam(
+                              widget.itemsList,
+                              ParamType.Document,
+                              isList: true,
+                            ),
+                            'address' : serializeParam(
+                              searchableDropDownKey
+                                  .currentState
+                                  ?.storesDict[searchableDropDownKey
+                                  .currentState?.selectedValue]
+                                  ?.address,
+                              ParamType.String,
+                              isList: false,
+                            ),
+                            'formattedAddress' : serializeParam(
+                              searchableDropDownKey.currentState!.selectedValue,
+                              ParamType.String,
+                              isList: false,
+                            ),
+                            'image' : serializeParam(
+                              searchableDropDownKey.currentState!.selectedValueImage,
+                              ParamType.String,
+                              isList: false,
+                            ),
+                            'cpf' : serializeParam(
+                              controller.text,
+                              ParamType.String,
+                              isList: false,
+                            ),
+                          }.withoutNulls,
+                          extra: <String, dynamic>{
+                            'itemsList': widget.itemsList,
+                          },
+                        ) : null,
+                        text: 'Check Out',
+                        icon: Icon(
+                          Icons.shopping_cart_checkout,
+                          size: 24,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                        ),
+                        options: FFButtonOptions(
+                          width: MediaQuery.sizeOf(context).width,
+                          height: 70,
+                          padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                          iconPadding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          color: FlutterFlowTheme.of(context).secondary,
+                          textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                            fontFamily: 'Readex Pro',
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            letterSpacing: 0.0,
+                          ),
+                          elevation: 10,
+                          borderRadius: BorderRadius.circular(8),
+                          disabledColor: FlutterFlowTheme.of(context).secondaryText,
+                          disabledTextColor: FlutterFlowTheme.of(context).primaryBackground,
+                        ),
+                      ),
+                    ].divide(const SizedBox(height: 12)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

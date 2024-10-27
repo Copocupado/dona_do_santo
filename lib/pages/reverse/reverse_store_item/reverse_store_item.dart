@@ -167,7 +167,7 @@ class CardViewLayout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if(doc is! NovidadesRecord)
+                        /*if(doc is! NovidadesRecord)
                           StreamBuilder<UsersRecord>(
                             stream: FFAppState().userInfo(
                               uniqueQueryKey: doc.createdBy.toString(),
@@ -197,7 +197,7 @@ class CardViewLayout extends StatelessWidget {
                                 ),
                               );
                             },
-                          ),
+                          ),*/
                         Container(
                           constraints: const BoxConstraints(
                             maxHeight: 30,
@@ -387,7 +387,7 @@ class Chip extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
-        color: FlutterFlowTheme.of(context).tertiary,
+        color: FlutterFlowTheme.of(context).primaryText,
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -397,7 +397,7 @@ class Chip extends StatelessWidget {
           textAlign: TextAlign.center,
           style: FlutterFlowTheme.of(context).headlineMedium.override(
             fontFamily: 'Outfit',
-            color: FlutterFlowTheme.of(context).primary,
+            color: FlutterFlowTheme.of(context).primaryBackground,
             fontWeight: FontWeight.w400,
           ),
         ),

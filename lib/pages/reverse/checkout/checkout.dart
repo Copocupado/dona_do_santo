@@ -274,9 +274,10 @@ class Checkout extends StatelessWidget {
                       }
                     },
                     text: 'Confirmar Compra',
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.check_circle,
                       size: 24,
+                      color: FlutterFlowTheme.of(context).primaryText,
                     ),
                     options: FFButtonOptions(
                       padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
