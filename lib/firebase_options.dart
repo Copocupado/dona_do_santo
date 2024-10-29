@@ -65,12 +65,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC9lHcXQn9d61QaDrmoiZbn3baZ1_BMPzU',
-    appId: '1:696798996786:ios:795553dedf01138a0f8f2b',
+    appId: '1:696798996786:ios:99e6bb3f543b01bd0f8f2b',
     messagingSenderId: '696798996786',
     projectId: 'dona-do-santo-ujhc0y',
     storageBucket: 'dona-do-santo-ujhc0y.appspot.com',
     androidClientId: '696798996786-3uqe37uh9unck4qs92hdmqhe5kcocaoq.apps.googleusercontent.com',
-    iosClientId: '696798996786-auutovnaoas42veke2th79f1t6d82vp8.apps.googleusercontent.com',
-    iosBundleId: 'com.mycompany.donadosanto',
+    iosClientId: '696798996786-e07mtm0bgiqeon0pgh1jgi1n1rk39s7b.apps.googleusercontent.com',
+    iosBundleId: 'com.mycompany.donadosanto.app',
   );
+
 }

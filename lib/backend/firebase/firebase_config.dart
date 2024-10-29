@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import '../../firebase_options.dart';
 
 import '../../auth/firebase_auth/auth_util.dart';
 import '../schema/notification_tokens_record.dart';
@@ -30,7 +32,9 @@ class FirebaseApi {
               messagingSenderId: "696798996786",
               appId: "1:696798996786:web:e75938a9ccb957e40f8f2b"));
     } else {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
     }
     fcmToken = await returnFcmToken();
   }

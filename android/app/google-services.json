@@ -7,17 +7,53 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:696798996786:android:a13629bba5d1717d0f8f2b",
+        "mobilesdk_app_id": "1:696798996786:android:620a6c5a7ee864f10f8f2b",
         "android_client_info": {
-          "package_name": "com.mycompany.donadosanto"
+          "package_name": "com.example"
         }
       },
       "oauth_client": [
         {
-          "client_id": "696798996786-atcssmutn2h6vncut5r581s32akee4ao.apps.googleusercontent.com",
+          "client_id": "696798996786-iqd464tan04hja8b3k6np5hetf6lqf50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQs55Fagz0sp7WQ52vdjLZvLXFdzF0itY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696798996786-ec02p8e9sg9p9ua7uejrhc3mhcuir0gn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "696798996786-02qnf5u52vvq9j8pireqnqr3k83hpq19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.untitled2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696798996786:android:a90f9c5f066eb4290f8f2b",
+        "android_client_info": {
+          "package_name": "com.example.adonadosanto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696798996786-3uqe37uh9unck4qs92hdmqhe5kcocaoq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mycompany.donadosanto",
+            "package_name": "com.example.adonadosanto",
             "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
           }
         },
@@ -39,10 +75,206 @@
               "client_type": 3
             },
             {
-              "client_id": "696798996786-auutovnaoas42veke2th79f1t6d82vp8.apps.googleusercontent.com",
+              "client_id": "696798996786-02qnf5u52vvq9j8pireqnqr3k83hpq19.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.mycompany.donadosanto"
+                "bundle_id": "com.example.untitled2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696798996786:android:55de6bc93b10bc2b0f8f2b",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696798996786-iqd464tan04hja8b3k6np5hetf6lqf50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQs55Fagz0sp7WQ52vdjLZvLXFdzF0itY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696798996786-ec02p8e9sg9p9ua7uejrhc3mhcuir0gn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "696798996786-02qnf5u52vvq9j8pireqnqr3k83hpq19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.untitled2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696798996786:android:61817729bfa559180f8f2b",
+        "android_client_info": {
+          "package_name": "com.example.socorro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696798996786-iqd464tan04hja8b3k6np5hetf6lqf50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQs55Fagz0sp7WQ52vdjLZvLXFdzF0itY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696798996786-ec02p8e9sg9p9ua7uejrhc3mhcuir0gn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "696798996786-02qnf5u52vvq9j8pireqnqr3k83hpq19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.untitled2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696798996786:android:69dd2190ff6f7e630f8f2b",
+        "android_client_info": {
+          "package_name": "com.example.untitled1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696798996786-iqd464tan04hja8b3k6np5hetf6lqf50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQs55Fagz0sp7WQ52vdjLZvLXFdzF0itY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696798996786-ec02p8e9sg9p9ua7uejrhc3mhcuir0gn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "696798996786-02qnf5u52vvq9j8pireqnqr3k83hpq19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.untitled2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696798996786:android:a13629bba5d1717d0f8f2b",
+        "android_client_info": {
+          "package_name": "com.mycompany.donadosanto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696798996786-atcssmutn2h6vncut5r581s32akee4ao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.donadosanto",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "696798996786-btitq0l3qlsuv16nrqp4isd00ci63pgl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.donadosanto",
+            "certificate_hash": "3cb74e194fdb868d67406c2b746ab20712e357cb"
+          }
+        },
+        {
+          "client_id": "696798996786-iqd464tan04hja8b3k6np5hetf6lqf50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQs55Fagz0sp7WQ52vdjLZvLXFdzF0itY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696798996786-ec02p8e9sg9p9ua7uejrhc3mhcuir0gn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "696798996786-02qnf5u52vvq9j8pireqnqr3k83hpq19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.untitled2"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696798996786:android:ba041a681d7b72c90f8f2b",
+        "android_client_info": {
+          "package_name": "firebaseAndroid.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696798996786-iqd464tan04hja8b3k6np5hetf6lqf50.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQs55Fagz0sp7WQ52vdjLZvLXFdzF0itY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696798996786-ec02p8e9sg9p9ua7uejrhc3mhcuir0gn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "696798996786-02qnf5u52vvq9j8pireqnqr3k83hpq19.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.untitled2"
               }
             }
           ]
