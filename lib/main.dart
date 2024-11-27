@@ -205,7 +205,7 @@ class _NavBarPageState extends State<NavBarPage> {
         haptic: false,
         tabs: const [
           GButton(
-            icon: FontAwesomeIcons.home,
+            icon: FontAwesomeIcons.house,
             text: 'Home',
             iconSize: 20.0,
           ),
