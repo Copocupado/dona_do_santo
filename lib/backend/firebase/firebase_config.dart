@@ -1,105 +1,167 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dona_do_santo/flutter_flow/flutter_flow_util.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import '../../firebase_options.dart';
-
 import '../../auth/firebase_auth/auth_util.dart';
 import '../schema/notification_tokens_record.dart';
 import 'dart:io';
 
 class FirebaseApi {
+  static final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  static String? fcmToken;
 
-/*  final GoRouter goRouter;
-
-  FirebaseApi({required this.goRouter});*/
-
-  static final firebaseMessaging = FirebaseMessaging.instance;
-  static late final String? fcmToken;
-  /*final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();*/
-
-  static Future initFirebase() async {
-    if (kIsWeb) {
-      await Firebase.initializeApp(
-          options: const FirebaseOptions(
-              apiKey: "AIzaSyAsFywFEtX94E_d8pN30tfB4jBpNAPNEDg",
-              authDomain: "dona-do-santo-ujhc0y.firebaseapp.com",
-              projectId: "dona-do-santo-ujhc0y",
-              storageBucket: "dona-do-santo-ujhc0y.appspot.com",
-              messagingSenderId: "696798996786",
-              appId: "1:696798996786:web:e75938a9ccb957e40f8f2b"));
-    } else {
+  static Future<bool> initFirebase() async {
+    try {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      return true;
+    } on FirebaseException catch (e) {
+
+      _logError('Firebase Initialization Error', {
+        'code': e.code,
+        'message': e.message,
+      });
+      return false;
+    } on PlatformException catch (e) {
+      _logError('Platform Initialization Error', {
+        'code': e.code,
+        'message': e.message,
+      });
+      return false;
+    } catch (e) {
+
+      _logError('Unexpected Firebase Initialization Error', {
+        'error': e.toString(),
+      });
+      return false;
     }
-    fcmToken = await returnFcmToken();
-  }
-  /*void handleMessage(RemoteMessage? message) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      goRouter.go('/notifications');
-    });
   }
 
 
-  Future<void> handleBackgroundMessage(RemoteMessage message) async {
-    handleMessage(message);
+  static Future<bool> initNotifications() async {
+    try {
+      // Request notification permissions
+      final NotificationSettings permissionResult =
+      await firebaseMessaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      switch (permissionResult.authorizationStatus) {
+        case AuthorizationStatus.authorized:
+        case AuthorizationStatus.provisional:
+          fcmToken = await _safeGetFcmToken();
+
+          if (fcmToken == null) {
+            _logError('FCM Token Retrieval Failed', {
+              'message': 'Unable to obtain FCM token'
+            });
+            return false;
+          }
+
+          await _saveNotificationToken(fcmToken!);
+          return true;
+
+        case AuthorizationStatus.denied:
+          _logError('Notification Permissions', {
+            'status': 'Denied',
+            'message': 'User denied notification permissions'
+          });
+          return false;
+
+        case AuthorizationStatus.notDetermined:
+          _logError('Notification Permissions', {
+            'status': 'Not Determined',
+            'message': 'Notification permissions not determined'
+          });
+          return false;
+      }
+    } catch (e) {
+      _logError('Notification Initialization Error', {
+        'error': e.toString(),
+      });
+      return false;
+    }
   }
 
-  Future<void> initPushNotifications() async {
-    await firebaseMessaging.setForegroundNotificationPresentationOptions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+  static Future<String?> _safeGetFcmToken() async {
+    try {
+      return await firebaseMessaging.getToken().timeout(
+        const Duration(seconds: 10),
+        onTimeout: () {
+          _logError('FCM Token Retrieval', {
+            'message': 'Token retrieval timed out'
+          });
+          return null;
+        },
+      );
+    } catch (e) {
+      _logError('FCM Token Retrieval Error', {
+        'error': e.toString(),
+      });
+      return null;
+    }
+  }
 
-    // Handle messages when the app is in the foreground
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      handleMessage(message);
-    });
-
-    // Handle messages when the app is in the background but not terminated
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      handleMessage(message);
-    });
-
-    FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
-  }*/
-
-
-  static Future<void> initNotifications() async{
+  static Future<void> _saveNotificationToken(String token) async {
     try {
       await NotificationTokensRecord.collection
-          .doc(fcmToken)
+          .doc(token)
           .set(createNotificationTokensRecordData(
         platform: Platform.operatingSystem,
         createdTime: getCurrentTimestamp,
         userReference: currentUserReference,
       ));
     } catch (e) {
-      print('Error checking document existence: $e');
+      _logError('Notification Token Save Error', {
+        'error': e.toString(),
+        'token': token,
+      });
     }
   }
 
-  static Future<void> disableNotifications() async{
+  static Future<bool> disableNotifications() async {
+    if (fcmToken == null) return false;
+
     try {
-      var docRef = FirebaseFirestore.instance.collection('tokens_de_notificacao').doc(fcmToken);
+      var docRef = FirebaseFirestore.instance
+          .collection('tokens_de_notificacao')
+          .doc(fcmToken);
+
       await docRef.delete();
+      fcmToken = null;
+      return true;
     } catch (e) {
-      print('Error checking document existence: $e');
+      _logError('Disable Notifications Error', {
+        'error': e.toString(),
+      });
+      return false;
     }
   }
 
-  static Future<String?> returnFcmToken() async {
-    await firebaseMessaging.requestPermission();
-    return await firebaseMessaging.getToken();
+  static void _logError(String context, Map<String, dynamic> details) {
+    print('FirebaseApi Error - $context');
+    details.forEach((key, value) {
+      print('  $key: $value');
+    });
+
+    try {
+      FirebaseCrashlytics.instance.recordError(
+        Exception(context),
+        null, // Stack trace
+        reason: details.toString(),
+        information: details.entries
+            .map((entry) => '${entry.key}: ${entry.value}')
+            .toList(),
+      );
+    } catch (e) {
+      print('Error logging to Crashlytics: $e');
+    }
   }
-
-
 }
-
-
-
